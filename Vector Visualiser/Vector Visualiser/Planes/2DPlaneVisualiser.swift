@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct _2DPlaneVisualiser: View {
-    
     @State private var selectedVectorID: UUID? = nil
+    @State private var secondarySelectedVectorID: UUID? = nil
     @Binding var currentDimension: Int?
     
     var body: some View {
         VStack {
-            _2DCoordinateGrid(selectedVectorID: $selectedVectorID)
+            _2DCoordinateGrid(selectedVectorID: $selectedVectorID, secondarySelectedVectorID: $secondarySelectedVectorID)
                 .border(Color.black)
         }
         .onAppear() {
@@ -25,6 +25,7 @@ struct _2DPlaneVisualiser: View {
 
 struct _2DCoordinateGrid: View {
     @Binding var selectedVectorID: UUID?
+    @Binding var secondarySelectedVectorID: UUID?
     
     var body: some View {
         GeometryReader { metrics in
@@ -53,7 +54,8 @@ struct _2DCoordinateGrid: View {
                 .stroke(x == 0 ? Color.black : Color.gray, lineWidth: x == 0 ? 2 : 1)
             }
             
-            _2DVectorArrow(i: 2, j: 3, id: UUID(), selectedVectorID: $selectedVectorID)
+            _2DVectorArrow(i: 2, j: 3, selectedVectorID: $selectedVectorID, secondarySelectedVectorID: $secondarySelectedVectorID)
+            _2DVectorArrow(i: 1, j: -4, selectedVectorID: $selectedVectorID, secondarySelectedVectorID: $secondarySelectedVectorID)
         }
         .frame(width: 450, height: 450) // Set frame size
     }
@@ -62,9 +64,12 @@ struct _2DCoordinateGrid: View {
 struct _2DVectorArrow: View {
     var i: CGFloat
     var j: CGFloat
-    var id: UUID
-
+    var id: UUID? = UUID()
+    
+    @State private var isCommandKeyPressed: Bool = false
+    
     @Binding var selectedVectorID: UUID?
+    @Binding var secondarySelectedVectorID: UUID?
     
     var body: some View {
         GeometryReader { metrics in
@@ -105,12 +110,41 @@ struct _2DVectorArrow: View {
                 path.move(to: CGPoint(x: endX, y: endY))
                 path.addLine(to: arrowPoint2)
             }
-            .stroke(selectedVectorID == id ? Color.blue : Color.black, lineWidth: 2)
-            .contentShape(Rectangle()) // Make the entire vector tappable
+            .stroke(selectedVectorID == id ? Color.blue : (secondarySelectedVectorID == id ? Color.red : Color.black), lineWidth: 2)
             .onTapGesture {
-                selectedVectorID = id
+                if (isCommandKeyPressed) {
+                    if let x = selectedVectorID { // ensure a primary vector is selected
+                        if x != id {
+                            secondarySelectedVectorID = id // ensures a vector cannot be selected twice
+                        }
+                    }
+                } else {
+                    secondarySelectedVectorID = nil
+                    selectedVectorID = id
+                }
             }
         }
         .frame(width: 450, height: 450) // Set frame size
+        .trackKeyPress(isCommandKeyPressed: $isCommandKeyPressed)
+    }
+}
+
+struct KeyPressModifier: ViewModifier {
+    @Binding var isCommandKeyPressed: Bool
+    
+    func body(content: Content) -> some View {
+        content
+            .onAppear {
+                NSEvent.addLocalMonitorForEvents(matching: .flagsChanged) { event in
+                    isCommandKeyPressed = event.modifierFlags.contains(.command)
+                    return event
+                }
+            }
+    }
+}
+
+extension View {
+    func trackKeyPress(isCommandKeyPressed: Binding<Bool>) -> some View {
+        self.modifier(KeyPressModifier(isCommandKeyPressed: isCommandKeyPressed))
     }
 }
