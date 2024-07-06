@@ -14,6 +14,7 @@ struct PopupMaster: View {
     }
     
     @Binding var currentPopup: Popup
+    @Binding var vectors2d: [Vector2D]
     
     var body: some View {
         GeometryReader { metrics in
@@ -24,7 +25,7 @@ struct PopupMaster: View {
                     .opacity(currentPopup == .none ? 0 : 0.3)
                 switch currentPopup {
                 case .new2DVector:
-                    New2DVectorPopup(currentPopup: $currentPopup)
+                    New2DVectorPopup(currentPopup: $currentPopup, vectors: $vectors2d)
                 case .none:
                     EmptyView()
                 }

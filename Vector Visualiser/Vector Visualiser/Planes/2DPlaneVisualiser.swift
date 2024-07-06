@@ -7,25 +7,11 @@
 
 import SwiftUI
 
-struct Vector {
-    var id: UUID
-    var i: CGFloat
-    var j: CGFloat
-    var name: String?
-    var isUnitVector: Bool
-}
-
 struct _2DPlaneVisualiser: View {
     @State private var selectedVectorID: UUID? = nil
     @State private var secondarySelectedVectorID: UUID? = nil
     @Binding var currentDimension: Int?
-    
-    @State private var vectors: [Vector] = [
-        Vector(id: UUID(), i: 2, j: 3, isUnitVector: false),
-        Vector(id: UUID(), i: 1, j: -4, isUnitVector: false),
-        Vector(id: UUID(), i: 1, j: 0, name: "i", isUnitVector: true),
-        Vector(id: UUID(), i: 0, j: 1, name: "j", isUnitVector: true)
-    ]
+    @Binding var vectors: [Vector2D]
     
     var body: some View {
         if let _ = selectedVectorID {
@@ -42,7 +28,13 @@ struct _2DPlaneVisualiser: View {
         VStack {
             _2DCoordinateGrid(selectedVectorID: $selectedVectorID, secondarySelectedVectorID: $secondarySelectedVectorID, vectors: $vectors)
                 .border(Color.black)
-        }
+            HStack {
+                Spacer()
+                Button("Delete selected vector") {
+                    deleteSelectedVector()
+                }
+            }
+        }.frame(width: 450)
         .onAppear() {
             currentDimension = 2
         }
@@ -56,12 +48,23 @@ struct _2DPlaneVisualiser: View {
         }
         return nil
     }
+    
+    private func deleteSelectedVector() -> Void {
+        if let id = selectedVectorID {
+            for i in 0..<vectors.count {
+                if vectors[i].id == id {
+                    vectors.remove(at: i)
+                    break
+                }
+            }
+        }
+    }
 }
 
 struct _2DCoordinateGrid: View {
     @Binding var selectedVectorID: UUID?
     @Binding var secondarySelectedVectorID: UUID?
-    @Binding var vectors: [Vector]
+    @Binding var vectors: [Vector2D]
     
     var body: some View {
         GeometryReader { metrics in

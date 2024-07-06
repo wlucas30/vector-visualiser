@@ -8,18 +8,33 @@
 import SwiftUI
 import SwiftData
 
+struct Vector2D {
+    var id: UUID
+    var i: CGFloat
+    var j: CGFloat
+    var name: String?
+    var isUnitVector: Bool
+}
+
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var items: [Item]
     @State private var currentDimension: Int?
     @State private var currentPopup: PopupMaster.Popup = .none
+    
+    @State private var vectors2d: [Vector2D] = [
+        Vector2D(id: UUID(), i: 2, j: 3, isUnitVector: false),
+        Vector2D(id: UUID(), i: 1, j: -4, isUnitVector: false),
+        Vector2D(id: UUID(), i: 1, j: 0, name: "i", isUnitVector: true),
+        Vector2D(id: UUID(), i: 0, j: 1, name: "j", isUnitVector: true)
+    ]
 
     var body: some View {
         ZStack {
             NavigationSplitView {
                 List {
                     NavigationLink {
-                        _2DPlaneVisualiser(currentDimension: $currentDimension)
+                        _2DPlaneVisualiser(currentDimension: $currentDimension, vectors: $vectors2d)
                     } label: {
                         HStack {
                             Image(systemName: "square")
@@ -52,7 +67,7 @@ struct ContentView: View {
             } detail: {
                 Text("Please select a plane to visualise")
             }
-            PopupMaster(currentPopup: $currentPopup)
+            PopupMaster(currentPopup: $currentPopup, vectors2d: $vectors2d)
         }
     }
 }

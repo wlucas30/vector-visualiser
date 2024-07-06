@@ -14,6 +14,7 @@ struct New2DVectorPopup: View {
     @State private var errorOccurred: String? = nil
     
     @Binding var currentPopup: PopupMaster.Popup
+    @Binding var vectors: [Vector2D]
     
     var body: some View {
         GeometryReader { metrics in
@@ -81,7 +82,8 @@ struct New2DVectorPopup: View {
     private func addNewVector() {
         errorOccurred = nil
         if let i = Int(iScalar), let j = Int(jScalar) {
-            print(i, j)
+            vectors.append(Vector2D(id: UUID(), i: CGFloat(i), j: CGFloat(j), isUnitVector: false))
+            currentPopup = .none
         } else {
             errorOccurred = "Invalid values entered"
         }
