@@ -21,7 +21,7 @@ struct _3DPlaneVisualiser: View {
         if let _ = selectedVectorID {
             let selectedVectorComponents = getComponentsOfVector(id: selectedVectorID!)
             if let x = selectedVectorComponents {
-                Text("Currently selected vector: (\(x[0].formattedString()!), \(x[1].formattedString()!)), \(x[2].formattedString()!)")
+                Text("Currently selected vector: (\(x[0].formattedString()!), \(x[1].formattedString()!), \(x[2].formattedString()!))")
             } else {
                 Text("No vector is selected")
             }

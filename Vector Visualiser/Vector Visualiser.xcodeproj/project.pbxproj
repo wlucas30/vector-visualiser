@@ -19,6 +19,7 @@
 		77615AEF2C2B2C8200015782 /* PopupMaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77615AEE2C2B2C8200015782 /* PopupMaster.swift */; };
 		77615AF22C2B301800015782 /* New2DVectorPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77615AF12C2B301800015782 /* New2DVectorPopup.swift */; };
 		77615AF42C591EA500015782 /* 3DPlaneVisualiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77615AF32C591EA500015782 /* 3DPlaneVisualiser.swift */; };
+		77E75EEA2C60FD05000B6CD3 /* New3DVectorPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77E75EE92C60FD05000B6CD3 /* New3DVectorPopup.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,7 @@
 		77615AEE2C2B2C8200015782 /* PopupMaster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupMaster.swift; sourceTree = "<group>"; };
 		77615AF12C2B301800015782 /* New2DVectorPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = New2DVectorPopup.swift; sourceTree = "<group>"; };
 		77615AF32C591EA500015782 /* 3DPlaneVisualiser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 3DPlaneVisualiser.swift; sourceTree = "<group>"; };
+		77E75EE92C60FD05000B6CD3 /* New3DVectorPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = New3DVectorPopup.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,6 +158,7 @@
 			isa = PBXGroup;
 			children = (
 				77615AF12C2B301800015782 /* New2DVectorPopup.swift */,
+				77E75EE92C60FD05000B6CD3 /* New3DVectorPopup.swift */,
 			);
 			path = Popups;
 			sourceTree = "<group>";
@@ -291,6 +294,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				77615AF22C2B301800015782 /* New2DVectorPopup.swift in Sources */,
+				77E75EEA2C60FD05000B6CD3 /* New3DVectorPopup.swift in Sources */,
 				77615AC12C1F940A00015782 /* ContentView.swift in Sources */,
 				77615AF42C591EA500015782 /* 3DPlaneVisualiser.swift in Sources */,
 				77615AC32C1F940A00015782 /* Item.swift in Sources */,

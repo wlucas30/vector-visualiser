@@ -10,11 +10,13 @@ import SwiftUI
 struct PopupMaster: View {
     enum Popup: Codable {
         case new2DVector
+        case new3DVector
         case none
     }
     
     @Binding var currentPopup: Popup
     @Binding var vectors2d: [Vector2D]
+    @Binding var vectors3d: [Vector3D]
     
     var body: some View {
         GeometryReader { metrics in
@@ -26,6 +28,8 @@ struct PopupMaster: View {
                 switch currentPopup {
                 case .new2DVector:
                     New2DVectorPopup(currentPopup: $currentPopup, vectors: $vectors2d)
+                case .new3DVector:
+                    New3DVectorPopup(currentPopup: $currentPopup, vectors: $vectors3d)
                 case .none:
                     EmptyView()
                 }

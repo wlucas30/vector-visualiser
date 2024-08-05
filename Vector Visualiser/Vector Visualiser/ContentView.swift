@@ -74,7 +74,7 @@ struct ContentView: View {
                             if currentDimension == 2 {
                                 currentPopup = .new2DVector
                             } else if currentDimension == 3 {
-                               // currentPopup = .new3DVector
+                                currentPopup = .new3DVector
                             }
                         } label: {
                             Label("Add", systemImage: "plus")
@@ -84,7 +84,7 @@ struct ContentView: View {
             } detail: {
                 Text("Please select a plane to visualise")
             }
-            PopupMaster(currentPopup: $currentPopup, vectors2d: $vectors2d)
+            PopupMaster(currentPopup: $currentPopup, vectors2d: $vectors2d, vectors3d: $vectors3d)
         }
     }
 }
