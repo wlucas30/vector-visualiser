@@ -14,6 +14,9 @@ struct _3DPlaneVisualiser: View {
     @Binding var currentDimension: Int?
     @Binding var vectors: [Vector3D]
     
+    @State private var horizontalRotation: Float = 0
+    @State private var verticalRotation: Float = 0
+    
     var body: some View {
         if let _ = selectedVectorID {
             let selectedVectorComponents = getComponentsOfVector(id: selectedVectorID!)
@@ -27,9 +30,10 @@ struct _3DPlaneVisualiser: View {
         }
         
         VStack {
-            _3DCoordinateGrid(selectedVectorID: $selectedVectorID, secondarySelectedVectorID: $secondarySelectedVectorID, vectors: $vectors)
+            _3DCoordinateGrid(selectedVectorID: $selectedVectorID, secondarySelectedVectorID: $secondarySelectedVectorID, vectors: $vectors, horizontalRotation: $horizontalRotation, verticalRotation: $verticalRotation)
                 .border(Color.black)
             HStack {
+                RotationalController(horizontalRotation: $horizontalRotation, verticalRotation: $verticalRotation)
                 Spacer()
                 Button("Delete selected vector") {
                     deleteSelectedVector()
@@ -66,6 +70,8 @@ struct _3DCoordinateGrid: View {
     @Binding var selectedVectorID: UUID?
     @Binding var secondarySelectedVectorID: UUID?
     @Binding var vectors: [Vector3D]
+    @Binding var horizontalRotation: Float
+    @Binding var verticalRotation: Float
     
     var body: some View {
         GeometryReader { metrics in
@@ -95,7 +101,7 @@ struct _3DCoordinateGrid: View {
             }
             
             ForEach(vectors, id: \.id) { vector_3d in
-                _3DVectorArrow(vector_3d: vector_3d, id: vector_3d.id, name: vector_3d.name, isUnitVector: vector_3d.isUnitVector, selectedVectorID: $selectedVectorID, secondarySelectedVectorID: $secondarySelectedVectorID)
+                _3DVectorArrow(vector_3d: vector_3d, id: vector_3d.id, name: vector_3d.name, isUnitVector: vector_3d.isUnitVector, horizontalRotation: $horizontalRotation, verticalRotation: $verticalRotation, selectedVectorID: $selectedVectorID, secondarySelectedVectorID: $secondarySelectedVectorID)
             }
             
         }
@@ -109,6 +115,9 @@ struct _3DVectorArrow: View {
     var name: String?
     var isUnitVector: Bool
     
+    @Binding var horizontalRotation: Float
+    @Binding var verticalRotation: Float
+    
     @State private var isCommandKeyPressed: Bool = false
     
     @Binding var selectedVectorID: UUID?
@@ -120,7 +129,8 @@ struct _3DVectorArrow: View {
             let height = metrics.size.height
             let unitWidth = width / 16
             let unitHeight = height / 16
-            let vector = transform3Dto2D(vector: vector_3d)
+            let vector_rotated = applyRotationMatrix(vector: vector_3d, horizontalRotation: horizontalRotation, verticalRotation: verticalRotation)
+            let vector = transform3Dto2D(vector: vector_rotated)
             
             // **** Calculate transformed i and j scalars **** //
             
@@ -129,13 +139,13 @@ struct _3DVectorArrow: View {
             let endX = startX + vector.i * unitWidth
             let endY = startY - vector.j * unitHeight
             
-            let arrowLength: CGFloat = 10.0
+            /*let arrowLength: CGFloat = 10.0
             let arrowAngle: CGFloat = .pi / 6 // 30 degrees
             
             // Calculate the angle of the vector
             let angle = atan2(endY - startY, endX - startX)
             
-            // Calculate the points for the arrowhead
+            Calculate the points for the arrowhead
             let arrowPoint1 = CGPoint(
                 x: endX - arrowLength * cos(angle + arrowAngle),
                 y: endY - arrowLength * sin(angle + arrowAngle)
@@ -143,7 +153,7 @@ struct _3DVectorArrow: View {
             let arrowPoint2 = CGPoint(
                 x: endX - arrowLength * cos(angle - arrowAngle),
                 y: endY - arrowLength * sin(angle - arrowAngle)
-            )
+            )*/
             
             ZStack {
                 
@@ -209,4 +219,76 @@ func transform3Dto2D(vector: Vector3D) -> Vector2D {
     let new2DVector = Vector2D(id: UUID(), i: CGFloat(vector_translated.x), j: CGFloat(vector_translated.y), isUnitVector: false)
     
     return new2DVector
+}
+
+func applyRotationMatrix(vector: Vector3D, horizontalRotation: Float, verticalRotation: Float) -> Vector3D {
+    // This function rotates a 3D vector with the provided parameters in radians
+    // Convert vector to simd vector
+    let vector_new = simd_float3(x: Float(vector.i), y: Float(vector.j), z: Float(vector.k))
+    
+    // First apply horizontal rotation (around y axis)
+    var angle = horizontalRotation
+    var rotationMatrix = simd_float3x3(rows: [
+        simd_float3(cos(angle), 0, sin(angle)),
+        simd_float3(0, 1, 0),
+        simd_float3(-sin(angle), 0, cos(angle))
+    ])
+    
+    var vector_translated = rotationMatrix * vector_new
+    
+    // Then apply vertical rotation (around x axis)
+    angle = verticalRotation
+    rotationMatrix = simd_float3x3(rows: [
+        simd_float3(1, 0, 0),
+        simd_float3(0, cos(angle), -sin(angle)),
+        simd_float3(0, sin(angle), cos(angle))
+    ])
+    
+    vector_translated = rotationMatrix * vector_translated
+    
+    // Convert vector to our own vector type
+    let new3DVector = Vector3D(id: UUID(), i: CGFloat(vector_translated.x), j: CGFloat(vector_translated.y), k: CGFloat(vector_translated.z), isUnitVector: false)
+    
+    return new3DVector
+}
+
+struct RotationalController: View {
+    @Binding var horizontalRotation: Float
+    @Binding var verticalRotation: Float
+    
+    var body: some View {
+        VStack {
+            HStack {
+                Spacer()
+                Button(action: {
+                    verticalRotation += (.pi / 20)
+                }) {
+                    Image(systemName: "arrow.up")
+                }
+                Spacer()
+            }
+            HStack { 
+                Button(action: {
+                    horizontalRotation -= (.pi / 20)
+                }) {
+                    Image(systemName: "arrow.left")
+                }
+                Spacer()
+                Button(action: {
+                    horizontalRotation += (.pi / 20)
+                }) {
+                    Image(systemName: "arrow.right")
+                }
+            }
+            HStack {
+                Spacer()
+                Button(action: {
+                    verticalRotation -= (.pi / 20)
+                }) {
+                    Image(systemName: "arrow.down")
+                }
+                Spacer()
+            }
+        }.frame(width: 100)
+    }
 }

@@ -41,7 +41,7 @@ struct ContentView: View {
     @State private var vectors3d: [Vector3D] = [
         Vector3D(id: UUID(), i: 1, j: 0, k: 0, name: "i", isUnitVector: true),
         Vector3D(id: UUID(), i: 0, j: 1, k: 0, name: "j", isUnitVector: true),
-        Vector3D(id: UUID(), i: 0, j: 0, k: 1, name: "j", isUnitVector: true)
+        Vector3D(id: UUID(), i: 0, j: 0, k: 1, name: "k", isUnitVector: true)
     ]
 
     var body: some View {
