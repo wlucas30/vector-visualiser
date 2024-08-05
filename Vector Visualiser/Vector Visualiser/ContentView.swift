@@ -16,6 +16,15 @@ struct Vector2D {
     var isUnitVector: Bool
 }
 
+struct Vector3D {
+    var id: UUID
+    var i: CGFloat
+    var j: CGFloat
+    var k: CGFloat
+    var name: String?
+    var isUnitVector: Bool
+}
+
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var items: [Item]
@@ -27,6 +36,12 @@ struct ContentView: View {
         Vector2D(id: UUID(), i: 1, j: -4, isUnitVector: false),
         Vector2D(id: UUID(), i: 1, j: 0, name: "i", isUnitVector: true),
         Vector2D(id: UUID(), i: 0, j: 1, name: "j", isUnitVector: true)
+    ]
+    
+    @State private var vectors3d: [Vector3D] = [
+        Vector3D(id: UUID(), i: 1, j: 0, k: 0, name: "i", isUnitVector: true),
+        Vector3D(id: UUID(), i: 0, j: 1, k: 0, name: "j", isUnitVector: true),
+        Vector3D(id: UUID(), i: 0, j: 0, k: 1, name: "j", isUnitVector: true)
     ]
 
     var body: some View {
@@ -43,7 +58,7 @@ struct ContentView: View {
                     }
                     
                     NavigationLink {
-                        Text("Hello, world!")
+                        _3DPlaneVisualiser(currentDimension: $currentDimension, vectors: $vectors3d)
                     } label: {
                         HStack {
                             Image(systemName: "cube.transparent")
@@ -58,6 +73,8 @@ struct ContentView: View {
                         Button {
                             if currentDimension == 2 {
                                 currentPopup = .new2DVector
+                            } else if currentDimension == 3 {
+                               // currentPopup = .new3DVector
                             }
                         } label: {
                             Label("Add", systemImage: "plus")

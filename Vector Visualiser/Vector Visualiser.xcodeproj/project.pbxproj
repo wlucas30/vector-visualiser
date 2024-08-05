@@ -18,6 +18,7 @@
 		77615AED2C1F963F00015782 /* 2DPlaneVisualiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77615AEC2C1F963F00015782 /* 2DPlaneVisualiser.swift */; };
 		77615AEF2C2B2C8200015782 /* PopupMaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77615AEE2C2B2C8200015782 /* PopupMaster.swift */; };
 		77615AF22C2B301800015782 /* New2DVectorPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77615AF12C2B301800015782 /* New2DVectorPopup.swift */; };
+		77615AF42C591EA500015782 /* 3DPlaneVisualiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77615AF32C591EA500015782 /* 3DPlaneVisualiser.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		77615AEC2C1F963F00015782 /* 2DPlaneVisualiser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 2DPlaneVisualiser.swift; sourceTree = "<group>"; };
 		77615AEE2C2B2C8200015782 /* PopupMaster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupMaster.swift; sourceTree = "<group>"; };
 		77615AF12C2B301800015782 /* New2DVectorPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = New2DVectorPopup.swift; sourceTree = "<group>"; };
+		77615AF32C591EA500015782 /* 3DPlaneVisualiser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 3DPlaneVisualiser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,6 +147,7 @@
 			isa = PBXGroup;
 			children = (
 				77615AEC2C1F963F00015782 /* 2DPlaneVisualiser.swift */,
+				77615AF32C591EA500015782 /* 3DPlaneVisualiser.swift */,
 			);
 			path = Planes;
 			sourceTree = "<group>";
@@ -289,6 +292,7 @@
 			files = (
 				77615AF22C2B301800015782 /* New2DVectorPopup.swift in Sources */,
 				77615AC12C1F940A00015782 /* ContentView.swift in Sources */,
+				77615AF42C591EA500015782 /* 3DPlaneVisualiser.swift in Sources */,
 				77615AC32C1F940A00015782 /* Item.swift in Sources */,
 				77615ABF2C1F940A00015782 /* Vector_VisualiserApp.swift in Sources */,
 				77615AED2C1F963F00015782 /* 2DPlaneVisualiser.swift in Sources */,
